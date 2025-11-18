@@ -1,6 +1,94 @@
-# Shopify Theme + Import Script — Submission Package
+# Shopify Theme Customization + Product Import Script
 
-## Overview
+A complete Shopify assignment implementation featuring **theme customizations**, a powerful **Excel-based product importer**, and detailed documentation.  
+This project demonstrates real-world Shopify development across both **frontend (Liquid)** and **backend (Admin API)**.
+
+---
+
+## Tech Stack
+
+### **Frontend (Theme)**
+- Shopify Liquid  
+- JavaScript (ES6)  
+- Cart AJAX API  
+- LocalStorage  
+- CSS  
+- Slider Library (Slick/Swiper)
+
+### **Backend (Import Script)**
+- Node.js  
+- Axios  
+- XLSX / ExcelJS  
+- Shopify Admin REST + GraphQL  
+- dotenv
+
+---
+
+##  Demo
+
+![Home](./docs/Home.png)  
+![Listings](./docs/Collections.png)  
+![Open](./docs/Product.png)
+
+---
+
+#  Features
+
+## 1. Recently Viewed Products Widget
+Displays the last **5 products** viewed by the customer on any product page.
+
+### Highlights
+- Stores recent products using **localStorage**
+- Updates instantly on product navigation
+- Shows: image, title, price, “Add to Cart”
+- Carousel slider UI
+- Responsive and theme-compatible
+
+### Screenshot
+![Recently Viewed Slider](./docs/RecentlyViewed.png)
+
+---
+
+## 2. Cart Drawer — Per-Item Notes
+Allows customers to add **notes per line item**, such as gift messages or engraving text.
+
+### Highlights
+- Input box below each cart item  
+- Updates instantly through AJAX  
+- Saved as **line item properties**, visible at checkout  
+- Compatible with cart drawer + cart page
+
+### Screenshot
+![Ad To Cart](./docs/AddToCart.png)
+![Cart Notes](./docs/CartNotes.png)
+
+---
+
+## 3. Product Import Script (Excel → Shopify)
+A command-line automation tool that reads `.xlsx` and syncs products via Shopify Admin API.
+
+### Supports
+- Creating + updating products  
+- Variants (SKU-based matching)  
+- Title  
+- HTML Description  
+- Vendor  
+- Tag management  
+- Product type  
+- Price  
+- Inventory  
+- Images (via URL)  
+- Publishing to Online Store  
+- Handles rate limits automatically  
+
+### Sample Products
+![Excel Import](./products.csv)
+
+---
+
+
+
+# Overview
 This repository contains two parts delivered for the assignment:
 - **Part 1 — Theme customization**: Add *Recently Viewed Products* on the product page and per-line-item notes in the cart drawer with real-time updates.
 - **Part 2 — Import script**: A command-line script (Node.js example included) that reads an Excel workbook and creates/updates Shopify products via the Admin GraphQL API.
@@ -92,25 +180,3 @@ This sample contains 10 sample rows you can use to test the script.
 SHOP=your-shop.myshopify.com ADMIN_API_ACCESS_TOKEN=shpat_xxx API_VERSION=2024-10 node import_script.js sample_products.xlsx
 ```
 
----
-## Submission checklist (for the Google Form)
-1. Preview Link of your store — e.g. `https://your-store.myshopify.com/?preview_theme_id=THEME_ID`
-2. Documentation — paste this README (or upload doc) and list changed files (see list above).
-3. Screenshots / Demo video — capture product page with recently viewed, show cart with per-line notes, show checkout with line item properties.
-
-Then submit/attach files to the Google Form:
-https://docs.google.com/forms/d/e/1FAIpQLScVW78bFd5QApWwUcQgN7-M2UYBzPWTwuE8_ihAvvcyFw69hg/viewform?usp=publish-editor
-
----
-## Files included in this package
-- `README.md` (this document)
-- `sample_products.xlsx` (sample Excel file with 10 rows)
-
----
-## Support / Handover notes
-If you want, I can:
-- Produce the actual `import_script.js` (Node.js) with fully working GraphQL mutations and backoff logic.
-- Produce the Liquid/JS theme snippets (full files) ready to paste into your theme editor.
-- Create a short demo video (screen capture) showing the flow.
-
-Tell me which of the above you want next and I will generate the specific files/snippets.
