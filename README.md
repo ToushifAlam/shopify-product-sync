@@ -81,8 +81,14 @@ A command-line automation tool that reads `.xlsx` and syncs products via Shopify
 - Publishing to Online Store  
 - Handles rate limits automatically  
 
-### Sample Products
-![Excel Import](./products.csv)
+### Sample Products Preview
+
+| title           | descriptionHtml            | productType | vendor   | tags            | variantPrice | sku             | inventoryQuantity |
+|----------------|-----------------------------|-------------|----------|-----------------|--------------|------------------|-------------------|
+| Blue T-Shirt   | <p>Soft cotton shirt</p>    | Shirts      | MyBrand  | summer, cotton  | 19.99        | TSHIRT-BLUE-01   | 30                |
+| Red Hoodie     | <p>Warm red hoodie</p>      | Hoodies     | MyBrand  | winter, fleece  | 49.00        | HOODIE-RED-02    | 15                |
+| Black Cap      | <p>Stylish cap</p>          | Accessories | MyBrand  | cap, black      | 15.00        | CAP-BLK-03       | 50                |
+
 
 ---
 
