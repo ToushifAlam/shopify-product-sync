@@ -12,18 +12,12 @@ const PUBLICATION_ID = process.env.PUBLICATION_ID;
 const GRAPHQL_URL = `https://${SHOP}/admin/api/${API_VERSION}/graphql.json`;
 const REST_URL = `https://${SHOP}/admin/api/${API_VERSION}`;
 
-/* ---------------------------------------------------------
-   HELPERS
---------------------------------------------------------- */
 function cleanId(gid) {
   return gid.replace("gid://shopify/Product/", "");
 }
 
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
-/* ---------------------------------------------------------
-   GRAPHQL
---------------------------------------------------------- */
 async function graphQL(query, variables = {}) {
   const res = await axios.post(
     GRAPHQL_URL,
@@ -38,9 +32,6 @@ async function graphQL(query, variables = {}) {
   return res.data;
 }
 
-/* ---------------------------------------------------------
-   SEARCH PRODUCT
---------------------------------------------------------- */
 async function findProduct(title) {
   const query = `
     query($query: String!) {
@@ -54,9 +45,6 @@ async function findProduct(title) {
   return result?.data?.products?.edges?.[0]?.node || null;
 }
 
-/* ---------------------------------------------------------
-   GRAPHQL PUBLISH (WORKING)
---------------------------------------------------------- */
 async function publishProduct(productGid) {
   const mutation = `
     mutation publishProduct($id: ID!, $pub: ID!) {
@@ -84,15 +72,12 @@ async function publishProduct(productGid) {
   const res = await graphQL(mutation, variables);
 
   if (res.data?.publishablePublish?.userErrors?.length) {
-    console.log("❌ Publish User Errors:", res.data.publishablePublish.userErrors);
+    console.log("Publish User Errors:", res.data.publishablePublish.userErrors);
   } else {
-    console.log("🌍 Published:", productGid);
+    console.log("Published:", productGid);
   }
 }
 
-/* ---------------------------------------------------------
-   CREATE PRODUCT (REST)
---------------------------------------------------------- */
 async function createProduct(p) {
   const body = {
     product: {
@@ -112,17 +97,13 @@ async function createProduct(p) {
   const productId = res.data.product.id;
   const productGid = res.data.product.admin_graphql_api_id;
 
-  console.log("✅ Created:", p.title);
+  console.log("Created:", p.title);
 
-  // publish using GraphQL
   await publishProduct(productGid);
 
   return { id: productId, gid: productGid };
 }
 
-/* ---------------------------------------------------------
-   UPDATE PRODUCT (REST)
---------------------------------------------------------- */
 async function updateProduct(p, gid) {
   const id = cleanId(gid);
 
@@ -142,14 +123,11 @@ async function updateProduct(p, gid) {
     headers: { "X-Shopify-Access-Token": TOKEN },
   });
 
-  console.log("📝 Updated:", p.title);
+  console.log("Updated:", p.title);
 
   return { id, gid };
 }
 
-/* ---------------------------------------------------------
-   CREATE / UPDATE VARIANT
---------------------------------------------------------- */
 async function syncVariant(productId, p) {
   try {
     // Get all variants of the product
@@ -163,9 +141,6 @@ async function syncVariant(productId, p) {
     // Check if SKU exists
     let existing = variants.find(v => v.sku === p.sku);
 
-    /* ---------------------------------------------------------
-       UPDATE VARIANT (correct API endpoint)
-    --------------------------------------------------------- */
     if (existing) {
       const body = {
         variant: {
@@ -176,20 +151,16 @@ async function syncVariant(productId, p) {
         }
       };
 
-      // CORRECT ENDPOINT (this is the one that Shopify accepts)
       await axios.put(
         `${REST_URL}/variants/${existing.id}.json`,
         body,
         { headers: { "X-Shopify-Access-Token": TOKEN } }
       );
 
-      console.log("🔄 Updated variant:", p.sku);
+      console.log("Updated variant:", p.sku);
       return;
     }
 
-    /* ---------------------------------------------------------
-       CREATE NEW VARIANT
-    --------------------------------------------------------- */
     const body = {
       variant: {
         product_id: productId,
@@ -205,17 +176,13 @@ async function syncVariant(productId, p) {
       { headers: { "X-Shopify-Access-Token": TOKEN } }
     );
 
-    console.log("🟢 Created new variant:", p.sku);
+    console.log("Created new variant:", p.sku);
 
   } catch (err) {
-    console.error("❌ Variant ERROR:", err.response?.data || err);
+    console.error("Variant ERROR:", err.response?.data || err);
   }
 }
 
-
-/* ---------------------------------------------------------
-   READ CSV
---------------------------------------------------------- */
 function readCSV() {
   return new Promise((resolve) => {
     const rows = [];
@@ -226,26 +193,23 @@ function readCSV() {
   });
 }
 
-/* ---------------------------------------------------------
-   RUN
---------------------------------------------------------- */
 async function run() {
-  console.log("\n🚀 Sync Started...\n");
+  console.log("\nSync Started...\n");
 
   const rows = await readCSV();
 
   for (let p of rows) {
-    console.log(`🔍 Processing → ${p.title}`);
+    console.log(`Processing → ${p.title}`);
 
     const existing = await findProduct(p.title);
 
     let product = null;
 
     if (existing) {
-      console.log("📦 Found — updating...");
+      console.log("Found — updating...");
       product = await updateProduct(p, existing.id);
     } else {
-      console.log("🆕 Creating new...");
+      console.log("Creating new...");
       product = await createProduct(p);
     }
 
@@ -253,7 +217,8 @@ async function run() {
     await delay(300);
   }
 
-  console.log("\n✅ DONE — All Products Synced!\n");
+  console.log("\nDONE — All Products Synced!\n");
 }
 
 run();
+
