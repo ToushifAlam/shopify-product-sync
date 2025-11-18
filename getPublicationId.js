@@ -32,8 +32,9 @@ async function run() {
     }
   );
 
-  console.log("\n🎯 Publications Found:\n");
+  console.log("\nPublications Found:\n");
   console.log(JSON.stringify(res.data, null, 2));
 }
+
 
 run();
